@@ -701,7 +701,7 @@ shader on a GPU.
 - **Symptom:** a self-contained Mac app reports `pipeline prebuild: no .../shader_pairs.tsv, nothing to build`, despite having all shader libraries; first-use draws still wait for pipeline compilation.
 - **Cause:** `dm/mac/pack_app.py` copied the shader map and prewarm manifest, but omitted the pair tables that the host reads beside `DM_NVN_SHMAP`. A full shader-library build does not itself build every render-pipeline base.
 - **Fix:** the Mac packer includes `shader_pairs.tsv` and `pso_pairs.tsv` when present. They remain optional for games without these tables. Existing app bundles need repacking; this does not change game files or shader translation.
-- **Found on:** [The Legend of Zelda: Echoes of Wisdom](../../dm/games/01008CF01BAAC000/README.md#rendering-and-shaders), update 1.1.0, Mac app. The initial run skipped the pair prebuild and contained a 308.4 ms frame with 283.5 ms of pipeline acquisition and 5.9 ms of GPU work.
+- **Found on:** [The Legend of Zelda: Echoes of Wisdom](../../dm/games/01008CF01BAAC000/README.md#rendering-and-shaders), update 1.1.0, Mac app: its initial bundle skipped the pair prebuild; the corrected bundle exposes all 7,495 shader pairs.
 - **Check:** `test_nsp_mac_app.App.test_pipeline_pair_tables` fails with a missing file on the original packer and verifies both tables beside the packaged shader map after the fix. Offline prebuilding with the corrected bundle finds 7,495 pairs. Audio/video synchronization and gameplay performance require a separate runtime comparison; package contents alone do not prove either.
 
 ### Offline pipeline archive reuse and fallback
